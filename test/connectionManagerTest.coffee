@@ -1,0 +1,2 @@
+#require 'testHelper'
+#require 'connectionManager'
