@@ -4,12 +4,12 @@
 # Usage
 
 Run as a  socket server
-```js
+```bash
 	make 
 ```
 
 # Test
 
-```js
+```bash
 	make test
 ```
