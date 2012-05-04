@@ -4,7 +4,7 @@ TEST_FILES = test/*Test.js
 
 all: run
 
-run: compile
+run: compile compile_protobuf
 	node app.js
 
 test: compile
@@ -16,3 +16,5 @@ compile:
 clean:
 	rm $(SRC_JS_FILES)   &> /dev/null
 	
+compile_protobuf: 
+	protoc protobufSchema.proto -o protobufSchema.desc
