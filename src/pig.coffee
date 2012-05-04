@@ -36,7 +36,7 @@ class Pig
 		# bind & listen
 		server.listen Config.port, Config.host
 		
-		logger.log "server running on port #{Config.port}"
+		logger.log "server running on port #{Config.port} and pid #{process.pid}"
 	
 	onDataHandler: (data) ->
 		logger.log data
