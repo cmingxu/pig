@@ -1,0 +1,15 @@
+# Intro
+	`Pig` 
+
+# Usage
+
+Run as a  socket server
+```js
+	make 
+```
+
+# Test
+
+```js
+	make test
+```
