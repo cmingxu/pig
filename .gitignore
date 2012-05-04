@@ -2,4 +2,4 @@ app.js
 config.js
 src/*.js
 test/*.js
-
+node_modules/*

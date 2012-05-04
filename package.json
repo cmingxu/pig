@@ -5,7 +5,8 @@
   "dependencies": {},
   "devDependencies": {
 		"nodeunit": "0.7.4",
-		"protobuf": "0.3.1"
+		"protobuf": "0.3.1",
+		"redis-node": "0.4.0"
 	},
   "optionalDependencies": {},
   "engines": {
