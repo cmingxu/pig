@@ -1,2 +1,2 @@
-#require 'testHelper'
-#require 'connectionManager'
+require './testHelper'
+require '../src/connectionManager'

@@ -1,10 +1,13 @@
-require 'testHelper'
+require './testHelper'
 
 Config = require '../config'
 
-testPort: (test) ->  
-	test.equals(this.foo, 'bar')
+testConfig = (test) ->  
+	test.equal(Config.port, 10000)
+	test.equal(Config.timeout, 20)
+	test.equal(Config.loggerType, "consoleLogger")
 	test.done()
 
-module.exports = { testPort }
+
+module.exports.testConfig = testConfig
 

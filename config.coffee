@@ -1,7 +1,8 @@
 Config = 
 	port: 10000
+	host: 'localhost'
 	timeout: 20
 	loggerType: "consoleLogger"
 
 
-exports = Config
+module.exports = Config

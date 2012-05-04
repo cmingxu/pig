@@ -1,4 +1,7 @@
 Pig = require "./src/pig"
 
-(new Pig()).run
+pigServer = new Pig()
+pigServer.run()
+
+module.exports = pigServer
 

@@ -15,17 +15,23 @@ class ConnectionManager
 	
 	add: (socket_connection) -> 
 		@connection_pool << socket_connection
+		console.log @connection_pool.length
+	
+	remove: (socket_connection) ->
+
+	cp: ->
+		@connection_pool
 
 	
 	purgeIdeal: ->
 
 
 ConnectionManager.sharedInstance = ->
-	sharedInstance || new ConnectionManager
+	sharedInstance || new ConnectionManager()
 
 
 
 	
 
 
-exports = module.exports = ConnectionManager.sharedInstance
+exports = module.exports = ConnectionManager

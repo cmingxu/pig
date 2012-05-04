@@ -2,32 +2,43 @@
 # Logger
 ##
 
-config = require '../config'
+Config = require '../config'
 
-class Logger
+
+sharedNullLogger = null
+class NullLogger
 	constructor: ->
+	log: (message)->
 
-	log: (mesage)->
+NullLogger.instance = -> 
+	return sharedNullLogger if sharedNullLogger
+	return sharedNullLogger =  new NullLogger()
 
-class NullLogger extends Logger
 
-class ConsoleLogger extends Logger
+sharedConsoleLogger = null
+class ConsoleLogger
 	constructor: ->
-		super
-
 	log: (mesage)  ->
-		console.log mesage + "\n"
+		console.log "LOG: => " + mesage
+		true
+	
+ConsoleLogger.instance = -> 
+	return sharedConsoleLogger if sharedConsoleLogger 
+	return sharedConsoleLogger = new ConsoleLogger()
+
+
+loggerFactory = ->
+	switch Config.loggerType 
+		when "nullLogger" 
+			return NullLogger.instance()
+			break
+		when "consoleLogger"
+			return ConsoleLogger.instance()
+			break
+		else
+			return NullLogger.instance()
 	
 
-Logger.loggerFactory = (logger) -> 
-	switch logger
-		when /nullLogger/i then new NullLogger 
-		when /consoleLogger/i then new ConsoleLogger
-		else 
-			new NullLogger 
 
-
-logger = Logger.loggerFactory(config.loggerType)
-
-
+logger = loggerFactory()
 module.exports = logger
