@@ -14,14 +14,20 @@ class ConnectionManager
 		@connection_pool.length
 	
 	add: (socket_connection) -> 
-		@connection_pool << socket_connection
-		console.log @connection_pool.length
+		@connection_pool.push socket_connection
 	
 	remove: (socket_connection) ->
 
 	cp: ->
 		@connection_pool
+	
+	withoutSelf: (socket_connection) ->
+		@connection_pool.filter (sc) ->
+			sc != socket_connection
 
+	broadCast: (message) ->
+		@connection_pool.forEach (sc) ->
+			sc.write(message + "\r\n")
 	
 	purgeIdeal: ->
 

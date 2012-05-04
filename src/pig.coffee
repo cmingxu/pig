@@ -8,33 +8,40 @@ class Pig
 		@cm = new ConnectionManager()
 
 	run: ->
+		self = this
 		server = net.createServer (stream)-> 
 			stream.setEncoding "utf8"
 
+			# stream on connected, happend after sever connected
 			stream.on 'connect', (socketFd) ->
 				logger.log 'connect'
-				stream.write "hello\r\n"
+				stream.write "accepted\r\n"
 
 			stream.on 'data', (data) -> 
-				logger.log 'data'
-				stream.write data
-
+				self.onDataHandler(data)
+				#self.cm.broadCast(data);
+				#self.cm.withoutSelf().forEach (sc)->
+				#	sc.write(data)
 
 			stream.on 'end',  -> 
 				logger.log 'end'
 				stream.end
 
-		self = this
+		# accept
 		server.on 'connection', (socket) ->
-			self.cm.add socket
-			console.log self.cm.cp()
-			logger.log self.cm.size()
 			logger.log "connection"
-			console.log(socket)
+			self.cm.add socket
+			logger.log self.cm.size()
 
+		# bind & listen
 		server.listen Config.port, Config.host
 		
 		logger.log "server running on port #{Config.port}"
+	
+	onDataHandler: (data) ->
+		logger.log data
+
+	
 		
 
 module.exports = Pig

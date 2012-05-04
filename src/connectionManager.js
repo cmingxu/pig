@@ -24,13 +24,25 @@
     };
 
     ConnectionManager.prototype.add = function(socket_connection) {
-      return this.connection_pool << socket_connection;
+      return this.connection_pool.push(socket_connection);
     };
 
     ConnectionManager.prototype.remove = function(socket_connection) {};
 
     ConnectionManager.prototype.cp = function() {
       return this.connection_pool;
+    };
+
+    ConnectionManager.prototype.withoutSelf = function(socket_connection) {
+      return this.connection_pool.filter(function(sc) {
+        return sc !== socket_connection;
+      });
+    };
+
+    ConnectionManager.prototype.broadCast = function(message) {
+      return this.connection_pool.forEach(function(sc) {
+        return sc.write(message + "\r\n");
+      });
     };
 
     ConnectionManager.prototype.purgeIdeal = function() {};

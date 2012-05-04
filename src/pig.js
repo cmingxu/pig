@@ -20,31 +20,32 @@
 
     Pig.prototype.run = function() {
       var self, server;
+      self = this;
       server = net.createServer(function(stream) {
         stream.setEncoding("utf8");
         stream.on('connect', function(socketFd) {
           logger.log('connect');
-          return stream.write("hello\r\n");
+          return stream.write("accepted\r\n");
         });
         stream.on('data', function(data) {
-          logger.log('data');
-          return stream.write(data);
+          return self.onDataHandler(data);
         });
         return stream.on('end', function() {
           logger.log('end');
           return stream.end;
         });
       });
-      self = this;
       server.on('connection', function(socket) {
-        self.cm.add(socket);
-        console.log(self.cm.cp);
-        logger.log(self.cm.size());
         logger.log("connection");
-        return console.log(socket);
+        self.cm.add(socket);
+        return logger.log(self.cm.size());
       });
       server.listen(Config.port, Config.host);
       return logger.log("server running on port " + Config.port);
+    };
+
+    Pig.prototype.onDataHandler = function(data) {
+      return logger.log(data);
     };
 
     return Pig;
