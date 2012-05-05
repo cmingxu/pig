@@ -13,7 +13,7 @@ class RedisStorge extends Storage
 	constructor: ->
 		@client = redis.createClient() 
 
-	desposal: ->
+	disposal: ->
 		@client.close()
 
 	set: (k, v, callback) -> 
