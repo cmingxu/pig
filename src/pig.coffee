@@ -39,7 +39,8 @@ class Pig
 		logger.log "server running on port #{Config.port}"
 	
 	onDataHandler: (data) ->
-		logger.log data
+    logger.log "ondata"
+    logger.log data
 
 	
 		
