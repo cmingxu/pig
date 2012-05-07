@@ -3,6 +3,8 @@ Config = require '../config'
 logger = require './logger' 
 ConnectionManager = require './connectionManager'
 
+PostOffice  = require('./postOffice').PostOffice
+
 class Pig
 	constructor: ->
 		@cm = new ConnectionManager()
@@ -10,6 +12,7 @@ class Pig
 	run: ->
 		self = this
 		server = net.createServer (stream)-> 
+			postOffice = new PostOffice()
 			stream.setEncoding "utf8"
 
 			# stream on connected, happend after sever connected
@@ -18,7 +21,7 @@ class Pig
 				stream.write "accepted\r\n"
 
 			stream.on 'data', (data) -> 
-				self.onDataHandler(data)
+				self.onDataHandler(data, postOffice)
 				#self.cm.broadCast(data);
 				#self.cm.withoutSelf().forEach (sc)->
 				#	sc.write(data)
@@ -39,12 +42,11 @@ class Pig
 		logger.log "server running on port #{Config.port} and pid #{process.pid}"
 	
 	# temptive handler
-	onDataHandler: (data) ->
+	onDataHandler: (data, postOffice) ->
 		data = new Buffer(data)
-		logger.log(Buffer.isBuffer(data))
-		logger.log(data.readUInt32LE(0))
-		logger.log data.readUInt32LE(4)
-		logger.log data.toString("ascii", 8, data.length)
+		postOffice.enqueueData data
+
+
 
 	
 		

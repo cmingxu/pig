@@ -35,19 +35,38 @@ IntegrationTest.transferPackage= (dataPackage)->
 	stream.destroy
 
 # send a protobuf package
-packageLenth = serialized.length + 4 + 4
-buffer = new Buffer(packageLenth)
-buffer.writeUInt32LE(packageLenth, 0)
-buffer.writeUInt32LE(1, 4)
-serialized.copy(buffer, 8, 0, serialized.length)
-console.log buffer.length
-IntegrationTest.transferPackage(buffer)
+
+sendTwoPackage = ->
+  packageLenth = serialized.length + 4 + 4
+  buffer = new Buffer(packageLenth * 2)
+  buffer.writeUInt32LE(packageLenth, 0)
+  buffer.writeUInt32LE(1, 4)
+  serialized.copy(buffer, 8, 0, serialized.length)
+  buffer.copy(buffer, 17, 0, buffer.length)
+  console.log buffer.length
+  IntegrationTest.transferPackage(buffer)
+
+sendTwoPackage()
+
+
+sendPackagesWithDataSeprated = ->
+	packageLenth = serialized.length + 4 + 4
+	buffer = new Buffer(packageLenth * 200)
+	i = 0 
+	offset = 0
+	for i in [0..200 - 1]
+		buffer.writeUInt32LE(packageLenth, offset)
+		buffer.writeUInt32LE(1, offset + 4)
+		serialized.copy(buffer, offset + 8, 0, serialized.length - 1)
+		buffer.copy(buffer, offset + 17, 0, buffer.length - 1)
+		console.log buffer.length
+		i = i + 1
+
+	IntegrationTest.transferPackage(buffer)
 
 
 
 
-
-
-
+sendPackagesWithDataSeprated()
 
 
