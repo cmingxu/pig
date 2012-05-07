@@ -26,6 +26,7 @@ ActionConstructWorld = schema['pig.ActionConstructWorld']
 aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
 serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
 
+
 IntegrationTest.transferPackage= (dataPackage)->
 	stream = net.createConnection Config.port
 	stream.on "connect", -> 
@@ -33,13 +34,14 @@ IntegrationTest.transferPackage= (dataPackage)->
 
 	stream.destroy
 
-
+# send a protobuf package
 packageLenth = serialized.length + 4 + 4
-buffer = new Buffer(pac)
-buffer.writeUInt32LE(packageLenth.toString(16), 0)
-
-console.log(buffer.toString())
-IntegrationTest.transferPackage(serialized)
+buffer = new Buffer(packageLenth)
+buffer.writeUInt32LE(packageLenth, 0)
+buffer.writeUInt32LE(1, 4)
+serialized.copy(buffer, 8, 0, serialized.length)
+console.log buffer.length
+IntegrationTest.transferPackage(buffer)
 
 
 

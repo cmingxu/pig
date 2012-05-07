@@ -38,9 +38,13 @@ class Pig
 		
 		logger.log "server running on port #{Config.port} and pid #{process.pid}"
 	
+	# temptive handler
 	onDataHandler: (data) ->
-    logger.log "ondata"
-    logger.log data
+		data = new Buffer(data)
+		logger.log(Buffer.isBuffer(data))
+		logger.log(data.readUInt32LE(0))
+		logger.log data.readUInt32LE(4)
+		logger.log data.toString("ascii", 8, data.length)
 
 	
 		
