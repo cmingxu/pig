@@ -1,5 +1,5 @@
-SRC_FILES = app.coffee config.coffee test/*.coffee src/*.coffee
-SRC_JS_FILES = app.js config.js test/*.js src/*.js
+SRC_FILES = app.coffee config.coffee test/*.coffee src/*.coffee mockRequests/*.coffee
+SRC_JS_FILES = app.js config.js test/*.js src/*.js mockRequests/*.js
 TEST_FILES = test/*Test.js
 
 all: run

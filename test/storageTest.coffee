@@ -1,13 +1,18 @@
 RedisStorage = require '../src/storage'
 
-client = new RedisStorage()
 
-client.set "hello", "world", (err, status) ->
-  throw err if err
-  console.log(status)
+testStorage = (test) ->
+  client = new RedisStorage()
 
-client.get "hello", (err, res) ->
-  throw err if err
-  console.log(res)
+  client.set "hello", "world", (err, status) ->
+    throw err if err
+    test.ok status
+
+  client.get "hello", (err, res) ->
+    throw err if err
+    test.equal res, "world"
+    client.disposal()
+    test.done()
 
 
+module.exports.testStorage = testStorage
