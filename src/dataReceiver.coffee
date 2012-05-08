@@ -12,13 +12,17 @@ class DataReceiver
     data.slice(8)
 
   readData: ->
-    dataLength = @circleBuffer.read(4).readUInt32BE(0)
     try
+      dataLength = @circleBuffer.read(4).readUInt32BE(0)
       result = @parse(@circleBuffer.read(dataLength, true))
     catch err
       result = null
     finally
       return result
+
+  readBatch: (callback) ->
+    while data = @readData()
+      callback data
 
 
 class CircleBuffer
