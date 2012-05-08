@@ -2,6 +2,7 @@
 # Logger
 ##
 
+fs = require 'fs'
 Config = require '../config'
 
 
@@ -18,13 +19,26 @@ NullLogger.instance = ->
 sharedConsoleLogger = null
 class ConsoleLogger
 	constructor: ->
-	log: (mesage)  ->
-		console.log "LOG: => " + mesage
+	log: (message)  ->
+		console.log "LOG: => " + message
 		true
 	
 ConsoleLogger.instance = -> 
 	return sharedConsoleLogger if sharedConsoleLogger 
 	return sharedConsoleLogger = new ConsoleLogger()
+
+
+sharedFileLogger = null
+class FileLogger
+	constructor: ->
+	log: (message)  ->
+		console.log message
+		fs.writeFile "../tmp/logger.log", message + "\n"
+		true
+	
+FileLogger.instance = -> 
+	return sharedFileLogger if sharedFileLogger 
+	return sharedFileLogger = new FileLogger()
 
 
 loggerFactory = ->
@@ -34,6 +48,10 @@ loggerFactory = ->
 			break
 		when "consoleLogger"
 			return ConsoleLogger.instance()
+			break
+
+		when "fileLogger"
+			return FileLogger.instance()
 			break
 		else
 			return NullLogger.instance()

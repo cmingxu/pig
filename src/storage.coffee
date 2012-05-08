@@ -1,6 +1,5 @@
 # redis access logic here
 
-#redis = require 'redis-node'
 redis = require 'redis'
 logger = require './logger'
 Config = require '../config'

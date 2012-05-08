@@ -5,10 +5,11 @@ TEST_FILES = test/*Test.js
 all: run
 
 run: compile compile_protobuf
-	node app.js
+	node app.js 
 
 test: compile
 	nodeunit $(TEST_FILES)
+	mocha  test/dataReceiverSpec.js
 
 compile:
 	coffee -c $(SRC_FILES)
@@ -18,3 +19,11 @@ clean:
 	
 compile_protobuf: 
 	protoc protobufSchema.proto -o protobufSchema.desc
+
+
+status: 
+	kill -USR1 `cat ./tmp/pig.pid` 
+	cat ./tmp/status
+
+stop:
+	kill -9 `cat ./tmp/pig.pid`

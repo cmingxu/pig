@@ -36,8 +36,4 @@ ConnectionManager.sharedInstance = ->
 	sharedInstance || new ConnectionManager()
 
 
-
-	
-
-
 exports = module.exports = ConnectionManager

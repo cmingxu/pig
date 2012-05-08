@@ -2,8 +2,8 @@ net = require 'net'
 Config = require '../config'
 logger = require './logger' 
 ConnectionManager = require './connectionManager'
-
-PostOffice  = require('./postOffice').PostOffice
+DataReceiver = require('./dataReceiver').DataReceiver
+Schema = require("./schema")
 
 class Pig
 	constructor: ->
@@ -12,29 +12,17 @@ class Pig
 	run: ->
 		self = this
 		server = net.createServer (stream)-> 
-			postOffice = new PostOffice()
-			stream.setEncoding "utf8"
-
-			# stream on connected, happend after sever connected
-			stream.on 'connect', (socketFd) ->
-				logger.log 'connect'
-				stream.write "accepted\r\n"
+			dataReceiver = new DataReceiver()
 
 			stream.on 'data', (data) -> 
-				self.onDataHandler(data, postOffice)
-				#self.cm.broadCast(data);
-				#self.cm.withoutSelf().forEach (sc)->
-				#	sc.write(data)
+				self.onDataHandler(data, dataReceiver)
 
 			stream.on 'end',  -> 
-				logger.log 'end'
-				stream.end
-
 		# accept
 		server.on 'connection', (socket) ->
-			logger.log "connection"
 			self.cm.add socket
-			logger.log self.cm.size()
+			logger.log 'new client connect'
+			logger.log "total client connection reached " + self.cm.size()
 
 		# bind & listen
 		server.listen Config.port, Config.host
@@ -42,9 +30,11 @@ class Pig
 		logger.log "server running on port #{Config.port} and pid #{process.pid}"
 	
 	# temptive handler
-	onDataHandler: (data, postOffice) ->
+	onDataHandler: (data, dataReceiver) ->
 		data = new Buffer(data)
-		postOffice.enqueueData data
+		dataReceiver.pushData data
+		dataReceiver.readBatchSync().forEach (aPackage) ->
+			console.log Schema.ActionConstructWorld.parse(aPackage)
 
 
 
@@ -52,4 +42,5 @@ class Pig
 		
 
 module.exports = Pig
+
 

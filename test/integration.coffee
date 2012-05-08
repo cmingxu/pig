@@ -31,16 +31,16 @@ IntegrationTest.transferPackage= (dataPackage)->
 	stream = net.createConnection Config.port
 	stream.on "connect", -> 
 		stream.write(dataPackage)
+		stream.end()
 
-	stream.destroy
 
 # send a protobuf package
 
 sendTwoPackage = ->
   packageLenth = serialized.length + 4 + 4
   buffer = new Buffer(packageLenth * 2)
-  buffer.writeUInt32LE(packageLenth, 0)
-  buffer.writeUInt32LE(1, 4)
+  buffer.writeUInt32BE(packageLenth, 0)
+  buffer.writeUInt32BE(1, 4)
   serialized.copy(buffer, 8, 0, serialized.length)
   buffer.copy(buffer, 17, 0, buffer.length)
   console.log buffer.length
@@ -51,14 +51,14 @@ sendTwoPackage()
 
 sendPackagesWithDataSeprated = ->
 	packageLenth = serialized.length + 4 + 4
-	buffer = new Buffer(packageLenth * 200)
+	buffer = new Buffer(packageLenth * 2000)
 	i = 0 
 	offset = 0
-	for i in [0..200 - 1]
-		buffer.writeUInt32LE(packageLenth, offset)
-		buffer.writeUInt32LE(1, offset + 4)
-		serialized.copy(buffer, offset + 8, 0, serialized.length - 1)
-		buffer.copy(buffer, offset + 17, 0, buffer.length - 1)
+	for i in [0..2000 - 1]
+		buffer.writeUInt32BE(packageLenth, offset)
+		buffer.writeUInt32BE(1, offset + 4)
+		serialized.copy(buffer, offset + 8, 0, serialized.length )
+		buffer.copy(buffer, offset + 17, 0, buffer.length )
 		console.log buffer.length
 		i = i + 1
 

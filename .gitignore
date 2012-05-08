@@ -2,4 +2,5 @@ app.js
 config.js
 src/*.js
 test/*.js
+mockRequests/*.js
 node_modules/*

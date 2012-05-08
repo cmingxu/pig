@@ -6,4 +6,4 @@ ActionConstructWorld = schema['pig.ActionConstructWorld']
 aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
 serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
 
-module.exports.ActionConstructWorld = ActionConstructWorld
+module.exports = { ActionConstructWorld }
