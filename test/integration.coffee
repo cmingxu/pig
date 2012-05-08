@@ -1,0 +1,72 @@
+net = require 'net'
+Config = require '../config'
+
+
+
+class IntegrationTest
+
+
+
+########## Connection Test ########
+CONNECTION_SIZE = 200
+start = 0
+
+IntegrationTest.makeConnection = ->
+	stream = new net.Stream()
+	stream.connect(Config.port, Config.host)
+	IntegrationTest.makeConnection() and start++ until start > CONNECTION_SIZE 
+
+######## Data Test #########
+
+fs = require('fs')
+Schema = require('protobuf_for_node').Schema
+schema = new Schema(fs.readFileSync('../protobufSchema.desc'))
+console.log schema
+ActionConstructWorld = schema['pig.ActionConstructWorld']
+aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
+serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
+
+
+IntegrationTest.transferPackage= (dataPackage)->
+	stream = net.createConnection Config.port
+	stream.on "connect", -> 
+		stream.write(dataPackage)
+
+	stream.destroy
+
+# send a protobuf package
+
+sendTwoPackage = ->
+  packageLenth = serialized.length + 4 + 4
+  buffer = new Buffer(packageLenth * 2)
+  buffer.writeUInt32LE(packageLenth, 0)
+  buffer.writeUInt32LE(1, 4)
+  serialized.copy(buffer, 8, 0, serialized.length)
+  buffer.copy(buffer, 17, 0, buffer.length)
+  console.log buffer.length
+  IntegrationTest.transferPackage(buffer)
+
+sendTwoPackage()
+
+
+sendPackagesWithDataSeprated = ->
+	packageLenth = serialized.length + 4 + 4
+	buffer = new Buffer(packageLenth * 200)
+	i = 0 
+	offset = 0
+	for i in [0..200 - 1]
+		buffer.writeUInt32LE(packageLenth, offset)
+		buffer.writeUInt32LE(1, offset + 4)
+		serialized.copy(buffer, offset + 8, 0, serialized.length - 1)
+		buffer.copy(buffer, offset + 17, 0, buffer.length - 1)
+		console.log buffer.length
+		i = i + 1
+
+	IntegrationTest.transferPackage(buffer)
+
+
+
+
+sendPackagesWithDataSeprated()
+
+
