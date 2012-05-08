@@ -1,5 +1,29 @@
 require 'should'
+
 CircleBuffer = require("../src/dataReceiver").CircleBuffer
+DataReceiver = require("../src/dataReceiver").DataReceiver
+fs = require 'fs'
+
+Schema = require('protobuf').Schema
+schema = new Schema(fs.readFileSync('protobufSchema.desc'))
+
+describe "DataReceiver", ->
+  beforeEach ->
+    @dataReceiver = new DataReceiver
+    ActionConstructWorld = schema['pig.ActionConstructWorld']
+    aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
+    @serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
+
+    packageLenth = @serialized.length + 4 + 4
+    @sourceBuffer = new Buffer packageLenth * 2
+    @sourceBuffer.writeUInt32BE(packageLenth, 0)
+    @sourceBuffer.writeUInt32BE(1, 4)
+    @serialized.copy @sourceBuffer, 8
+
+  it 'should insert data successful', ->
+    @dataReceiver.pushData @sourceBuffer
+    data = @dataReceiver.readData()
+    data.should.eql @serialized
 
 describe "CircleBuffer", ->
   beforeEach ->
@@ -83,17 +107,17 @@ describe "CircleBuffer", ->
       @circleBuffer_3.push @targtBuffer
 
     it 'should read correctly', ->
-      @circleBuffer.read(@sampleString.length).toString('utf8').should.eql @sampleString
-      @circleBuffer_2.read(@sampleString.length).toString('utf8').should.eql @sampleString
-      @circleBuffer_3.read(@sampleString.length).toString('utf8').should.eql @sampleString
+      @circleBuffer.read(@sampleString.length, true).toString('utf8').should.eql @sampleString
+      @circleBuffer_2.read(@sampleString.length, true).toString('utf8').should.eql @sampleString
+      @circleBuffer_3.read(@sampleString.length, true).toString('utf8').should.eql @sampleString
 
     it 'should update the startPos when read data successful', ->
-      @circleBuffer.read(@sampleString.length)
+      @circleBuffer.read(@sampleString.length, true)
       @circleBuffer.startPos.should.eql 12
-      @circleBuffer_2.read(@sampleString.length).toString('utf8').should.eql @sampleString
+      @circleBuffer_2.read(@sampleString.length, true).toString('utf8').should.eql @sampleString
       @circleBuffer_2.startPos.should.eql 11
-      @circleBuffer_3.read(@sampleString.length).toString('utf8').should.eql @sampleString
+      @circleBuffer_3.read(@sampleString.length, true).toString('utf8').should.eql @sampleString
       @circleBuffer_3.startPos.should.eql 0
-    
+
 
 

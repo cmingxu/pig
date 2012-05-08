@@ -2,10 +2,24 @@
 BUFFER_SIZE = 2048
 
 class DataReceiver
-  constructor: ->
-    @size = BUFFER_SIZE
-  pushData: (data)->
-    @endPoint += data.length
+  constructor: (size=BUFFER_SIZE) ->
+    @circleBuffer = new CircleBuffer(size)
+
+  pushData: (data) ->
+    @circleBuffer.push data
+
+  parse: (data) ->
+    data.slice(8)
+
+  readData: ->
+    dataLength = @circleBuffer.read(4).readUInt32BE(0)
+    try
+      result = @parse(@circleBuffer.read(dataLength, true))
+    catch err
+      result = null
+    finally
+      return result
+
 
 class CircleBuffer
   constructor: (size=BUFFER_SIZE) ->
@@ -36,24 +50,23 @@ class CircleBuffer
       sourceBuffer.copy @buffer, @endPos
       @endPos += sourceBuffer.length
 
-  read: (length) ->
+  read: (length, resetStartPos=false) ->
     resultBuffer = new Buffer(length)
     if @endPos >= @startPos
       throw new Error("no enough data to read") if length > @endPos - @startPos + 1
       @buffer.copy resultBuffer, 0, @startPos
-      @startPos += length
+      @startPos += length if resetStartPos
     else
       throw new Error("no enough data to read") if length > @length() + @endPos - @startPos
       if @length() - @startPos < length
         @buffer.copy resultBuffer, 0, @startPos, @length()
         @buffer.copy resultBuffer, @length() - @startPos, 0, @endPos
-        @startPos = length - @length() + @startPos
+        @startPos = length - @length() + @startPos if resetStartPos
       else
         @buffer.copy resultBuffer, 0, @startPos
-        @startPos += length
-        @startPos = 0 if @startPos is @length()
-
-
+        if resetStartPos
+          @startPos += length
+          @startPos = 0 if @startPos is @length()
     resultBuffer
 
   length: ->
