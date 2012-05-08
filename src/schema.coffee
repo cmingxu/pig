@@ -1,5 +1,5 @@
 fs = require('fs')
-Schema = require('protobuf_for_node').Schema
+Schema = require('protobuf').Schema
 schema = new Schema(fs.readFileSync('./protobufSchema.desc'))
 
 ActionConstructWorld = schema['pig.ActionConstructWorld']
