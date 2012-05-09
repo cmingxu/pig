@@ -15,6 +15,7 @@ class Pig
 			dataReceiver = new DataReceiver()
 
 			stream.on 'data', (data) -> 
+				console.log data.length
 				self.onDataHandler(data, dataReceiver)
 
 			stream.on 'end',  -> 
@@ -34,7 +35,7 @@ class Pig
 		data = new Buffer(data)
 		dataReceiver.pushData data
 		dataReceiver.readBatchSync().forEach (aPackage) ->
-			console.log Schema.ActionConstructWorld.parse(aPackage)
+			console.log aPackage
 
 
 

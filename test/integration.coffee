@@ -19,8 +19,8 @@ IntegrationTest.makeConnection = ->
 ######## Data Test #########
 
 fs = require('fs')
-Schema = require('protobuf_for_node').Schema
-schema = new Schema(fs.readFileSync('../protobufSchema.desc'))
+Schema = require('protobuf').Schema
+schema = new Schema(fs.readFileSync('protobufSchema.desc'))
 console.log schema
 ActionConstructWorld = schema['pig.ActionConstructWorld']
 aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
@@ -28,7 +28,7 @@ serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
 
 
 IntegrationTest.transferPackage= (dataPackage)->
-	stream = net.createConnection Config.port
+	stream = net.createConnection Config.port, Config.host
 	stream.on "connect", -> 
 		stream.write(dataPackage)
 		stream.end()

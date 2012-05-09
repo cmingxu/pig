@@ -1,5 +1,6 @@
 #default length circle buffer
 BUFFER_SIZE = 204800
+detectSchema = require('./schema').detectSchema
 
 class DataReceiver
 	constructor: (size=BUFFER_SIZE) ->
@@ -9,27 +10,35 @@ class DataReceiver
 		@circleBuffer.push data
 
 	parse: (data) ->
-		data.slice(8)
+    try
+      oringinData = detectSchema(data.slice(4,8).readUInt32BE(0)).parse data.slice(8)
+    catch err
+      console.log err
+      oringinData = null
+    finally
+      oringinData
 
 	readData: ->
-		try
-			dataLength = @circleBuffer.read(4).readUInt32BE(0)
-			result = @parse(@circleBuffer.read(dataLength, true))
-		catch err
-			result = null
-		finally
-			return result
+    try
+      dataLength = @circleBuffer.read(4).readUInt32BE(0)
+      result = @circleBuffer.read dataLength, true
+    catch err
+      console.log err
+      result = null
+    finally
+      result
 
-	readBatch: (callback) ->
-		while data = @readData()
-			callback(data)
+  readBatch: (callback) ->
+    while data = @readData()
+      parsedData = @parse data
+      callback parsedData
 
-	readBatchSync:  ->
-		datas  = []
-		while data = @readData()
-			datas.push data
-		datas
-
+  readBatchSync: ->
+    datas = []
+    while data = @readData()
+      parsedData = @parse data
+      datas.push parsedData if parsedData
+    datas
 
 class CircleBuffer
 	constructor: (size=BUFFER_SIZE) ->

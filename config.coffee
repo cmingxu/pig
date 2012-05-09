@@ -1,6 +1,6 @@
 Config = 
 	port: 10000
-	host: 'localhost'
+	host: '10.64.20.51'
 	timeout: 20
 	loggerType: "consoleLogger"
 
