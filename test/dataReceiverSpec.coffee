@@ -23,7 +23,7 @@ describe "DataReceiver", ->
   it 'should insert data successful', ->
     @dataReceiver.pushData @sourceBuffer
     data = @dataReceiver.readData()
-    data.should.eql @serialized
+    data[8..16].should.eql @serialized
 
 describe "CircleBuffer", ->
   beforeEach ->
