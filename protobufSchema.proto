@@ -1,7 +1,27 @@
-package pig;
+package bootcamp;
 
-message ActionConstructWorld{
-	required int32 x = 1;	
-	required int32 y = 2;	
-	required string type = 3;	
+message Position {
+    required float x = 1;
+    required float y = 2;
+}
+
+message ActorInfo {
+    required string guid = 1;
+    required string res_name = 2;
+    required Position pos = 3;
+}
+
+message Login {
+    required int32 msg_id = 1 [default = 1];
+    repeated ActorInfo info_list = 2;
+}
+
+message AddActor {
+    required int32 msg_id = 1 [default = 2];
+    required ActorInfo info = 2;
+}
+
+message DelActor {
+    required int32 msg_id = 1 [default = 3];
+    required string guid = 2;
 }

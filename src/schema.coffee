@@ -1,15 +1,18 @@
 fs = require('fs')
 Schema = require('protobuf').Schema
-schema = new Schema(fs.readFileSync('./protobufSchema.desc'))
+schemas = new Schema(fs.readFileSync('./protobufSchema.desc'))
 
-ActionConstructWorld = schema['pig.ActionConstructWorld']
-aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
-serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
+Position  = schemas['bootcamp.Position']
+ActorInfo = schemas['bootcamp.ActorInfo']
+Login     = schemas['bootcamp.Login']
+AddActor  = schemas['bootcamp.AddActor']
+DelActor  = schemas['bootcamp.DelActor']
 
 detectSchema = (actionCode) ->
-	switch actionCode
-		when 0x00000001 then ActionConstructWorld
-		# else throw new Error("Can't parse the dataSchema")
-		else ActionConstructWorld
+  switch actionCode
+    when 0x00000001 then Login
+    when 0x00000002 then AddActor
+    when 0x00000003 then DelActor
+    else throw new Error("Can't parse the dataSchema")
 
-module.exports = { ActionConstructWorld, detectSchema }
+module.exports =  { Position, ActorInfo, Login, AddActor, DelActor, detectSchema }

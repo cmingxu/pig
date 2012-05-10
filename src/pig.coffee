@@ -37,7 +37,6 @@ class Pig
     logger.log 'server receive data'
     dataReceiver.pushData data
     dataReceiver.readBatchSync().forEach (aPackage) ->
-      console.log aPackage
 
   # when new client connected
   onConectionHandler: (socket) ->
@@ -49,6 +48,7 @@ class Pig
   onEndHandler: (socket) ->
     @cm.remove socket
     logger.log @cm.size()
+
 
 
 
