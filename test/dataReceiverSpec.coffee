@@ -11,8 +11,8 @@ describe "DataReceiver", ->
   beforeEach ->
     @dataReceiver = new DataReceiver
     ActionConstructWorld = schema['pig.ActionConstructWorld']
-    aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
-    @serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
+    @aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
+    @serialized = ActionConstructWorld.serialize(@aActionConstructWorldPackage)
 
     packageLenth = @serialized.length + 4 + 4
     @sourceBuffer = new Buffer packageLenth * 2
@@ -20,10 +20,10 @@ describe "DataReceiver", ->
     @sourceBuffer.writeUInt32BE(1, 4)
     @serialized.copy @sourceBuffer, 8
 
-  it 'should insert data successful', ->
+  it 'should insert data successful and parse it successful', ->
     @dataReceiver.pushData @sourceBuffer
     data = @dataReceiver.readData()
-    data.should.eql @serialized
+    @aActionConstructWorldPackage.should.eql @dataReceiver.parse(data)
 
 describe "CircleBuffer", ->
   beforeEach ->

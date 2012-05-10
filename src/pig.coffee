@@ -1,46 +1,29 @@
 net = require 'net'
 Config = require '../config'
 logger = require './logger' 
-ConnectionManager = require './connectionManager'
 DataReceiver = require('./dataReceiver').DataReceiver
 Schema = require("./schema")
+Ninja  = require('./ninja')
 
 class Pig
-	constructor: ->
-		@cm = new ConnectionManager()
 
-	run: ->
-		self = this
-		server = net.createServer (stream)-> 
-			dataReceiver = new DataReceiver()
+  run: ->
+    server = net.createServer (stream) =>
+      # dataReceiver = new DataReceiver()
 
-			stream.on 'data', (data) -> 
-				console.log data.length
-				self.onDataHandler(data, dataReceiver)
+      server.on 'connection', (socket) =>
+        @onConnectionHandler(socket)
+        logger.log 'new client connect'
 
-			stream.on 'end',  -> 
-		# accept
-		server.on 'connection', (socket) ->
-			self.cm.add socket
-			logger.log 'new client connect'
-			logger.log "total client connection reached " + self.cm.size()
+    # bind & listen
+    server.listen Config.port, Config.host
 
-		# bind & listen
-		server.listen Config.port, Config.host
-		
-		logger.log "server running on port #{Config.port} and pid #{process.pid}"
-	
-	# temptive handler
-	onDataHandler: (data, dataReceiver) ->
-		data = new Buffer(data)
-		dataReceiver.pushData data
-		dataReceiver.readBatchSync().forEach (aPackage) ->
-			console.log aPackage
+    logger.log "server running on port #{Config.port} and pid #{process.pid}"
 
+  onConnectionHandler: (con) ->
+    ninja = new Ninja(con)
+    ninja.joinRoom
 
-
-	
-		
 
 module.exports = Pig
 
