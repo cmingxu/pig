@@ -45,7 +45,5 @@ class RedisStorge extends Storage
 		@client.hkeys(hk, callback)
 
 
-# TODO
-#createStorage (storage) ->
 	
 module.exports = RedisStorge
