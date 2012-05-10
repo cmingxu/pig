@@ -17,6 +17,9 @@ class ConnectionManager
 		@connection_pool.push socket_connection
 	
 	remove: (socket_connection) ->
+		pos = @connection_pool.indexOf(socket_connection)
+		@connection_pool.splice(pos, 1) if pos != -1
+		@connection_pool
 
 	cp: ->
 		@connection_pool
@@ -29,7 +32,7 @@ class ConnectionManager
 		@connection_pool.forEach (sc) ->
 			sc.write(message + "\r\n")
 	
-	purgeIdeal: ->
+
 
 
 ConnectionManager.sharedInstance = ->

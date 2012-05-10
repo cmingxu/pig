@@ -36,8 +36,8 @@ testStorageHmsetHmget = (test) ->
 	hashKey = "HmsetHmgetHashKey"
 	key1 = "HmsetHmgetKey1"
 	key2 = "HmsetHmgetKey2"
-	value1 = getRandomNumber();
-	value2 = getRandomNumber();
+	value1 = getRandomNumber()
+	value2 = getRandomNumber()
 	client.hset hashKey, key1, value1, (err, list) ->
 	client.hset hashKey, key2, value2, (err, list) ->
 	client.hmget hashKey, key1, key2, (err, list) ->
@@ -51,8 +51,8 @@ testStorageHgetall = (test) ->
 	hashKey = "HgetallHashKey"
 	key1 = "HgetallKey1"
 	key2 = "HgetallKey2"
-	value1 = getRandomNumber();
-	value2 = getRandomNumber();
+	value1 = getRandomNumber()
+	value2 = getRandomNumber()
 	client.hset hashKey, key1, value1, (err, list) ->
 	client.hset hashKey, key2, value2, (err, list) ->
 	client.hgetall hashKey, (err, dict) ->

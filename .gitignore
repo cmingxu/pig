@@ -4,3 +4,4 @@ src/*.js
 test/*.js
 mockRequests/*.js
 node_modules/*
+tmp/*

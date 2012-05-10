@@ -6,9 +6,10 @@ pigServer.run()
 
 
 # write pid to temp/pig.pid when app start
-pidStream = fs.createWriteStream("./tmp/pig.pid");
-pidStream.once 'open', (fd) -> 
-  pidStream.write process.pid
+fs.open "./tmp/pig.pid", "w", (err, fd) ->
+	throw err if err
+	fs.write fd, process.pid
+
 	
 
 
@@ -23,8 +24,11 @@ process.on 'SIGUSR1', ->
 		"concurrent connection now: " + pigServer.cm.size() ,
 		"memusage: rss = " + process.memoryUsage().rss + ", heapTotal=" +  process.memoryUsage().heapTotal 
 	]
-	fs.writeFile("./tmp/status", message.join("\n"))
 
+	fs.open "./tmp/status", "w", (err, fd) ->
+		throw err if err
+		fs.write fd, message.join("\n")
+	
 
 module.exports = pigServer
 

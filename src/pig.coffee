@@ -15,15 +15,17 @@ class Pig
 			dataReceiver = new DataReceiver()
 
 			stream.on 'data', (data) -> 
-				console.log data.length
+				logger.log 'server receive data'
 				self.onDataHandler(data, dataReceiver)
 
 			stream.on 'end',  -> 
+				self.cm.remove stream
+				logger.log self.cm.size()
+
 		# accept
 		server.on 'connection', (socket) ->
 			self.cm.add socket
-			logger.log 'new client connect'
-			logger.log "total client connection reached " + self.cm.size()
+			logger.log self.cm.size()
 
 		# bind & listen
 		server.listen Config.port, Config.host
@@ -36,6 +38,7 @@ class Pig
 		dataReceiver.pushData data
 		dataReceiver.readBatchSync().forEach (aPackage) ->
 			console.log aPackage
+
 
 
 
