@@ -13,6 +13,7 @@ class Pig
     pig_self = this
     server = net.createServer (stream)-> 
       dataReceiver = new DataReceiver()
+      dataReceiver.socket_connection = stream 
       connection_self = this
       stream.on 'data', (data) -> 
         try
@@ -41,6 +42,8 @@ class Pig
   # when new client connected
   onConectionHandler: (socket) ->
     @cm.add socket
+    # send map data here
+    socket.write 
     logger.log @cm.size()
 
 

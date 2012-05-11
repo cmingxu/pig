@@ -1,7 +1,19 @@
 
-W
-protobufSchema.protopig":
-ActionConstructWorld	
-x (	
-y (
-type (	
+Ã
+protobufSchema.protobootcamp" 
+Position	
+x (	
+y ("L
+	ActorInfo
+guid (	
+res_name (	
+pos (2.bootcamp.Position"B
+Login
+msg_id (:1&
+	info_list (2.bootcamp.ActorInfo"@
+AddActor
+msg_id (:2!
+info (2.bootcamp.ActorInfo"+
+DelActor
+msg_id (:3
+guid (	

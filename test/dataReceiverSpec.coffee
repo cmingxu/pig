@@ -10,12 +10,12 @@ schema = new Schema(fs.readFileSync('protobufSchema.desc'))
 describe "DataReceiver", ->
   beforeEach ->
     @dataReceiver = new DataReceiver
-    ActionConstructWorld = schema['pig.ActionConstructWorld']
-    aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
-    @serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
+    AddActor = schema['bootcamp.AddActor']
+    addActor = { msgId: 2, info: { guid: "guid", resName: 'house', pos: { x: 1.1, y: 1.2 } } }
+    @serialized = AddActor.serialize(addActor)
 
     packageLenth = @serialized.length + 4 + 4
-    @sourceBuffer = new Buffer packageLenth * 2
+    @sourceBuffer = new Buffer packageLenth * 1
     @sourceBuffer.writeUInt32BE(packageLenth, 0)
     @sourceBuffer.writeUInt32BE(1, 4)
     @serialized.copy @sourceBuffer, 8
@@ -23,7 +23,7 @@ describe "DataReceiver", ->
   it 'should insert data successful', ->
     @dataReceiver.pushData @sourceBuffer
     data = @dataReceiver.readData()
-    data[8..16].should.eql @serialized
+    data.slice(8).should.eql @serialized
 
 describe "CircleBuffer", ->
   beforeEach ->

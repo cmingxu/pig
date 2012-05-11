@@ -1,6 +1,6 @@
 fs = require('fs')
 Schema = require('protobuf').Schema
-schemas = new Schema(fs.readFileSync('./protobufSchema.desc'))
+schemas = new Schema(fs.readFileSync("./protobufSchema.desc"))
 
 Position  = schemas['bootcamp.Position']
 ActorInfo = schemas['bootcamp.ActorInfo']

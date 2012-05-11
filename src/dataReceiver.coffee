@@ -5,6 +5,7 @@ detectSchema = require('./schema').detectSchema
 class DataReceiver
   constructor: (size=BUFFER_SIZE) ->
     @circleBuffer = new CircleBuffer(size)
+    @socket_connection = null
 
   pushData: (data) ->
     @circleBuffer.push data
