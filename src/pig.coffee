@@ -4,6 +4,10 @@ logger = require './logger'
 ConnectionManager = require './connectionManager'
 DataReceiver = require('./dataReceiver').DataReceiver
 Schema = require("./schema")
+AddActor = Schema.AddActor
+DelActor = Schema.DelActor
+PlayerData = require("./playerData")
+map = new PlayerData()
 
 class Pig
   constructor: ->
@@ -37,20 +41,30 @@ class Pig
   onDataHandler: (data, dataReceiver) ->
     logger.log 'server receive data'
     dataReceiver.pushData data
-    dataReceiver.readBatchSync().forEach (aPackage) ->
+    dataReceiver.readBatch (aPackage)=>
+      packageSwitcher(aPackage, @cm.withoutSelf(dataReceiver.socket_connection))
+
 
   # when new client connected
   onConectionHandler: (socket) ->
     @cm.add socket
     # send map data here
-    socket.write 
+    map.currentMapPackage (data) -> 
+      socket.write data
     logger.log @cm.size()
-
 
   # when client disconnected
   onEndHandler: (socket) ->
     @cm.remove socket
     logger.log @cm.size()
+
+  packageSwitcher = (aPackage, other_connections) ->
+    if aPackage instanceof AddActor
+      map.set aPackage.info.guid, JSON.stringify(aPackage.info)
+
+    if aPackage instanceof DelActor
+      map.remove aPackage.guid
+
 
 
 

@@ -25,3 +25,9 @@ message DelActor {
     required int32 msg_id = 1 [default = 3];
     required string guid = 2;
 }
+
+message ActionConstructWorld {
+  required int32 x = 1;
+  required int32 y = 2;
+  required string type = 3;
+}

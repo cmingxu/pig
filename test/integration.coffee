@@ -22,7 +22,7 @@ fs = require('fs')
 Schema = require('protobuf').Schema
 schema = new Schema(fs.readFileSync('../protobufSchema.desc'))
 console.log schema
-ActionConstructWorld = schema['pig.ActionConstructWorld']
+ActionConstructWorld = schema['bootcamp.ActionConstructWorld']
 aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
 serialized = ActionConstructWorld.serialize(aActionConstructWorldPackage)
 
@@ -45,17 +45,15 @@ sendTwoPackage = ->
   console.log buffer.length
   IntegrationTest.transferPackage(buffer)
 
-sendTwoPackage()
-
-
+################### send multiple package #########
 sendPackagesWithDataSeprated = ->
 	packageLenth = serialized.length + 4 + 4
 	buffer = new Buffer(packageLenth * 2000)
 	i = 0 
 	offset = 0
 	for i in [0..2000 - 1]
-		buffer.writeUInt32BE(packageLenth, offset)
 		buffer.writeUInt32BE(1, offset + 4)
+		buffer.writeUInt32BE(packageLenth, offset)
 		serialized.copy(buffer, offset + 8, 0, serialized.length )
 		buffer.copy(buffer, offset + 17, 0, buffer.length )
 		console.log buffer.length
@@ -64,12 +62,18 @@ sendPackagesWithDataSeprated = ->
 	IntegrationTest.transferPackage(buffer)
 
 
-sendPackagesWithDataSeprated()
+#sendTwoPackage()
+#sendPackagesWithDataSeprated()
+#
+#onethounds= ->
+#	for i in [1..100]
+#		sendPackagesWithDataSeprated()
+#
+#setInterval(onethounds, 1000 )
+#
 
-onethounds= ->
-	for i in [1..100]
-		sendPackagesWithDataSeprated()
 
-setInterval(onethounds, 1000 )
-
-
+####### map return when initial login ###############
+IntegrationTest.makeConnection = ->
+	stream = new net.Stream()
+	stream.connect(Config.port, Config.host)

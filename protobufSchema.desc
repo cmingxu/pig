@@ -1,5 +1,5 @@
 
-Ã
+ÿ
 protobufSchema.protobootcamp" 
 Position	
 x (	
@@ -16,4 +16,8 @@
 info (2.bootcamp.ActorInfo"+
 DelActor
 msg_id (:3
-guid (	
+guid (	":
+ActionConstructWorld	
+x (	
+y (
+type (	

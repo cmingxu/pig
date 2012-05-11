@@ -4,7 +4,7 @@ TEST_FILES = test/*Test.js
 
 all: run
 
-run: compile compile_protobuf
+run: compile_protobuf compile
 	node app.js 
 
 test: compile
