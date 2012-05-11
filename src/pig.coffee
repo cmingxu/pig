@@ -24,8 +24,9 @@ class Pig
           pig_self.onDataHandler data, dataReceiver
         catch err
           logger.log 'data format error'
+          # clear data cache if error raised
           connection_self = new DataReceiver()
-          
+
       stream.on 'end',  -> 
         pig_self.onEndHandler stream
 
@@ -41,9 +42,8 @@ class Pig
   onDataHandler: (data, dataReceiver) ->
     logger.log 'server receive data'
     dataReceiver.pushData data
-    dataReceiver.readBatch (aPackage)=>
+    dataReceiver.readBatch (aPackage) =>
       packageSwitcher(aPackage, @cm.withoutSelf(dataReceiver.socket_connection))
-
 
   # when new client connected
   onConectionHandler: (socket) ->
@@ -62,8 +62,16 @@ class Pig
     if aPackage instanceof AddActor
       map.set aPackage.info.guid, JSON.stringify(aPackage.info)
 
+      dataPacakage = AddActor.addActorWith(aPackage)
+      other_connections.forEach (stream) -> 
+        stream.write(dataPacakage)
+
     if aPackage instanceof DelActor
       map.remove aPackage.guid
+
+      dataPacakage = DelActor.delActorWith(aPackage)
+      other_connections.forEach (stream) -> 
+        stream.write(dataPacakage)
 
 
 

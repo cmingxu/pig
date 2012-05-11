@@ -20,7 +20,7 @@ IntegrationTest.makeConnection = ->
 
 fs = require('fs')
 Schema = require('protobuf').Schema
-schema = new Schema(fs.readFileSync('../protobufSchema.desc'))
+schema = new Schema(fs.readFileSync(process.env.PWD + '/protobufSchema.desc'))
 console.log schema
 ActionConstructWorld = schema['bootcamp.ActionConstructWorld']
 aActionConstructWorldPackage = {x: 10, y: 100, type: "Box"}
