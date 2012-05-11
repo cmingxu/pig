@@ -23,7 +23,6 @@ class DataReceiver
       dataLength = @circleBuffer.read(4).readUInt32BE(0)
       result = @circleBuffer.read dataLength, true
     catch err
-      console.log err
       result = null
     finally
       result

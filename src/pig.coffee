@@ -1,20 +1,19 @@
-net = require 'net'
-Config = require '../config'
-logger = require './logger' 
+net          = require 'net'
+logger       = require './logger'
+Config       = require '../config'
 DataReceiver = require('./dataReceiver').DataReceiver
-Schema = require("./schema")
-Ninja  = require('./ninja')
+Schema       = require "./schema"
+Ninja        = require './ninja'
+RoomManager  = require './roomManager'
 
 class Pig
-
   run: ->
     server = net.createServer (stream) =>
       # dataReceiver = new DataReceiver()
 
-      server.on 'connection', (socket) =>
-        @onConnectionHandler(socket)
-        logger.log 'new client connect'
-
+    server.on 'connection', (socket) =>
+      logger.log 'new client connect'
+      @onConnectionHandler(socket)
     # bind & listen
     server.listen Config.port, Config.host
 
@@ -22,9 +21,7 @@ class Pig
 
   onConnectionHandler: (con) ->
     ninja = new Ninja(con)
-    ninja.joinRoom
-
+    room  = RoomManager.instance().pick()
+    room.accept ninja
 
 module.exports = Pig
-
-

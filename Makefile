@@ -18,7 +18,7 @@ clean:
 	rm $(SRC_JS_FILES)   &> /dev/null
 	
 compile_protobuf: 
-	protoc protobufSchema.proto -o protobufSchema.desc
+	protoc ./db/protobufSchema.proto -o ./db/protobufSchema.desc
 
 
 status: 

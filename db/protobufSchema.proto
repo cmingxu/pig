@@ -1,0 +1,31 @@
+package pig;
+
+message FruitFlow {
+	message Fruit {
+		required float position = 1;
+		required float speedX = 2;
+		required float speedY = 3;
+		required int32 type = 4;
+		required float delay = 5;
+		required int32 fruitId = 6;
+	}
+
+	required int32 actionCode = 1;
+	repeated Fruit fruitFlow = 2;
+}
+
+message CutFruit {
+	required int32 actionCode = 1;
+	required int32 fruitId = 2;
+}
+
+message ChangeScore {
+	required int32 actionCode = 1;
+	required int32 score = 2;
+	required int32 who = 3;
+}
+
+message GameOver {
+	required int32 actionCode = 1;
+}
+

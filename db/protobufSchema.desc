@@ -1,0 +1,26 @@
+
+â
+db/protobufSchema.protopig"±
+	FruitFlow
+
+actionCode ('
+	fruitFlow (2.pig.FruitFlow.Fruitg
+Fruit
+position (
+speedX (
+speedY (
+type (
+delay (
+fruitId ("/
+CutFruit
+
+actionCode (
+fruitId ("=
+ChangeScore
+
+actionCode (
+score (
+who ("
+GameOver
+
+actionCode (
