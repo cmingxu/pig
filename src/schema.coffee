@@ -14,12 +14,7 @@ DelActor  = schemas['bootcamp.DelActor']
 class BaseSchema
 
 BaseSchema.prototype.toProtobuf = ->
-  buffer = Login.serialize(@toJson())
-  b = new Buffer(8 + buffer.length)
-  b.writeUInt32BE(b.length, 0)
-  b.writeUInt32BE(1, 4)
-  buffer.copy(b, 8)
-  b
+  throw new Error("should implemented in child class")
   
 BaseSchema.prototype.toJson = ->
   throw new Error("should implemented in child class")
@@ -30,6 +25,16 @@ AddActor extends BaseSchema
 DelActor extends BaseSchema
 
 # login specfic function
+#
+
+Login.prototype.toProtobuf = ->
+  buffer = Login.serialize(@toJson())
+  b = new Buffer(8 + buffer.length)
+  b.writeUInt32BE(b.length, 0)
+  b.writeUInt32BE(1, 4)
+  buffer.copy(b, 8)
+  b
+
 Login.prototype.toJson = ->
   json =
     msgId: 1
@@ -43,11 +48,20 @@ Login.prototype.enqueueActor = (actor) ->
 
 # addActor specfic function
 
+AddActor.prototype.toProtobuf = ->
+  buffer = AddActor.serialize(@toJson())
+  b = new Buffer(8 + buffer.length)
+  b.writeUInt32BE(b.length, 0)
+  b.writeUInt32BE(2, 4)
+  buffer.copy(b, 8)
+  b
+
 AddActor.prototype.toJson = ->
   json = 
     msgId: 2
     info:
       @actor
+  json
 
 AddActor.prototype.actor = (actor) ->
   @actor = actor
@@ -58,6 +72,13 @@ AddActor.addActorWith = (actorPackage) ->
   addActor.toProtobuf()
 
 # DelActor specfic function
+DelActor.prototype.toProtobuf = ->
+  buffer = DelActor.serialize(@toJson())
+  b = new Buffer(8 + buffer.length)
+  b.writeUInt32BE(b.length, 0)
+  b.writeUInt32BE(3, 4)
+  buffer.copy(b, 8)
+  b
 
 DelActor.prototype.toJson = ->
   json =

@@ -36,7 +36,7 @@ class Pig
 
     # bind & listen
     server.listen Config.port, Config.host
-    logger.log "server running on port #{Config.port} and pid #{process.pid}"
+    logger.log "server running on port #{Config.host}:#{Config.port} and pid #{process.pid}"
 
   # temptive handler
   onDataHandler: (data, dataReceiver) ->
@@ -60,6 +60,7 @@ class Pig
 
   packageSwitcher = (aPackage, other_connections) ->
     if aPackage instanceof AddActor
+      logger.log "set guid with data :" + aPackage.info
       map.set aPackage.info.guid, JSON.stringify(aPackage.info)
 
       dataPacakage = AddActor.addActorWith(aPackage)
@@ -67,9 +68,10 @@ class Pig
         stream.write(dataPacakage)
 
     if aPackage instanceof DelActor
+      logger.log "remove actor with guid: " + aPackage.guid
       map.remove aPackage.guid
 
-      dataPacakage = DelActor.delActorWith(aPackage)
+      dataPacakage = DelActor.delActorWith(aPackage.guid)
       other_connections.forEach (stream) -> 
         stream.write(dataPacakage)
 

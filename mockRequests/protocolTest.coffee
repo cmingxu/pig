@@ -62,7 +62,7 @@ class MockRequest
     stream.write aDelActor(guid)
     stream.end()
 
-#MockRequest.addActor("uid")
+MockRequest.addActor("uid")
 
 #Login = schemas.Login
 #PlayerData = require("../src/playerData")
@@ -70,7 +70,7 @@ class MockRequest
 #  console.log data
 #  console.log( Login.parse( data.slice(8) ))
 #setTimeout(MockRequest.connect, 1000)
-setTimeout(MockRequest.removeActor("uid"), 5000)
-setTimeout(MockRequest.connect, 10000)
+setTimeout(MockRequest.removeActor("uid"), 1000)
+setTimeout(MockRequest.connect, 2000)
 
 
