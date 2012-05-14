@@ -1,6 +1,6 @@
 Config = 
 	port: 8888
-	host: "10.64.17.41"
+	host: "10.64.20.55"
 	timeout: 20
 	loggerType: "consoleLogger"
 

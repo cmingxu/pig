@@ -33,7 +33,7 @@ class FileLogger
 	constructor: ->
 	log: (message)  ->
 		console.log message
-		fs.writeFile "../tmp/logger.log", message + "\n"
+		fs.writeFile process.env.PWD + "/tmp/logger.log", message + "\n"
 		true
 	
 FileLogger.instance = -> 
