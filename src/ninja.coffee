@@ -2,6 +2,8 @@ redis  = require 'redis'
 logger = require './logger'
 
 FruitFlow = require('./Schema').FruitFlow
+CutFruit = require('./Schema').CutFruit
+ChangeScore = require('./Schema').ChangeScore
 Config = require '../config'
 RoomManager = require './roomManager'
 DataReceiver = require('./dataReceiver').DataReceiver
@@ -29,16 +31,24 @@ class Ninja
         @handleMessage message
 
   handleMessage: (message) ->
+    console.log "=============== rec message ==============="
     console.log message
-    # switch message.actionCode
-      # when 1 then @room.cutFruit(message.fruit_id, @id)
-    @room.generateFruitFlow()
-    @sendFruitFlow @room.fruitFlow
+    console.log "=============== done rec message ==============="
+    switch message.actionCode
+      when 1 then @room.cutFruit(message.fruitId, @id)
+      when 3 then @room.gameOver
+
+  changeScore: (score, who)->
+    @dataSender.sendData @dataSender.serialize(ChangeScore, {actionCode: 2, score: score, who: who})
 
   sendFruitFlow: (flow) ->
     @dataSender.sendData @dataSender.serialize(FruitFlow, flow)
 
-  gameOver: (flow) ->
-    @home.clear()
+  notifyCutFruit: (fruitId) ->
+    @dataSender.sendData @dataSender.serialize(CutFruit, {actionCode: 1, fruitId: fruitId})
+
+  gameOver: ->
+    console.log "gameOver"
+    # @home.clear()
 
 module.exports = Ninja

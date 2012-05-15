@@ -1,4 +1,4 @@
-Config = 
+Config =
 	port: 10000
 	host: '10.64.20.51'
 	timeout: 20

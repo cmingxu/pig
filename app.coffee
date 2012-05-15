@@ -25,6 +25,4 @@ process.on 'SIGUSR1', ->
 	]
 	fs.writeFile("./tmp/status", message.join("\n"))
 
-
 module.exports = pigServer
-

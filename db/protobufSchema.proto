@@ -12,6 +12,7 @@ message FruitFlow {
 
 	required int32 actionCode = 1;
 	repeated Fruit fruitFlow = 2;
+  required int64 startTimestamp = 3;
 }
 
 message CutFruit {

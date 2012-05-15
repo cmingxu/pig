@@ -1,10 +1,11 @@
 
-â
-db/protobufSchema.protopig"±
+ú
+db/protobufSchema.protopig"É
 	FruitFlow
 
 actionCode ('
-	fruitFlow (2.pig.FruitFlow.Fruitg
+	fruitFlow (2.pig.FruitFlow.Fruit
+startTimestamp (g
 Fruit
 position (
 speedX (
